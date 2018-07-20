@@ -1,0 +1,134 @@
+<html>
+<head>
+</head>
+
+<body>
+
+<h1>Fitting Arbitrary Functions using Regression</h1>
+
+<div>
+<svg id="plot" width="300" height="200" canvas='true'>
+  <polyline id="line" fill="none" stroke="blue" stroke-width="2"
+    points="" />
+  <polyline id="regressionLine" fill="none" stroke="red" stroke-width="2" points="" />
+</svg>
+</div>
+
+<div>
+<select id="degreeOption">
+	<option>1</option>
+	<option>2</option>
+	<option>3</option>
+	<option>4</option>
+	<option>5</option>
+</select>
+<button onclick="regress()">Regress</button>
+<button onclick="reset()">Reset</button>
+</div>
+
+<table>
+	<tr>
+		<td>Degree</td><td>R-Squared</td>
+	</tr>
+	<tr><td>1</td><td id="degree1">-</td></tr>
+	<tr><td>2</td><td id="degree2">-</td></tr>
+	<tr><td>3</td><td id="degree3">-</td></tr>
+	<tr><td>4</td><td id="degree4">-</td></tr>
+	<tr><td>5</td><td id="degree5">-</td></tr>
+</table>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js"></script>
+
+<script>
+	points = [[0,100]]
+	x = 0
+	function mousemovefunction(event) {
+		console.log("mouse move function")
+		if(event.target.hasAttribute('canvas')) {
+			console.log("mouse on canvas")
+			var xcoord = event.offsetX
+			var ycoord = event.offsetY
+			if(xcoord > x) {
+				points.concat(interpolate(points[-1],[xcoord, ycoord]) )
+				x = xcoord
+				updatesvg("line", points)
+			} else {
+				return
+			}
+		}
+		return
+	}
+
+	function interpolate(p1, p2) {
+		var x1 = p1[0]
+		var x2 = p2[0]
+		var y1 = p1[1]
+		var y2 = p2[1]
+
+		var points = []
+		var slope = (y2 - y1) * 1.0 / (x2 - x1)
+		for( var x_i=x1+1; x_i<= x2; x_i++) {
+			var y_i = parseInt(((x_i - x1) * slope) + 0.5)
+			points.push([x_i, y_i])
+		}
+		return points
+	}
+
+	function updatesvg(element, p) {
+		svgString = ""
+		for( var i=0; i < p.length; i++) {
+			var point = p[i]
+			svgString += point[0] + "," + point[1] + "\n";
+			lineElement = document.getElementById(element)
+			lineElement.setAttribute("points", svgString);
+		}
+	}
+
+	function regress() {
+		var degree = document.getElementById("degreeOption").value
+		console.log(degree)
+		var r = new regression("polynomial", points, parseInt(degree))
+		console.log(r)
+		rPoints = []
+		for(var i = 0; i < document.getElementById("plot").getAttribute("width"); i++) {
+			rPoints.push( [i, predict(r, i)])
+		}
+		console.log(rPoints)
+		updatesvg("regressionLine", rPoints)
+		rvalues()
+	}
+
+	function predict(regression, x) { 
+		f = 1.0
+		total = 0.0
+
+		for( var i=0; i<regression.equation.length; i++) {
+			total += regression.equation[i] * f;
+			f = f * x
+		}
+		return total
+	}
+
+	function rvalues() {
+		for(var i=1; i<6; i++) {
+			var r = new regression("polynomial",points, i)
+			console.log( r.r2)
+			document.getElementById("degree" + i.toString()).innerText = r.r2
+		}
+	}
+
+	function reset() {
+		points = [[0,100]]
+		x = 0
+		updatesvg("line", points)
+		rvalues()
+
+	}
+
+	document.addEventListener('mousemove', mousemovefunction, false)
+
+</script>
+
+</html>

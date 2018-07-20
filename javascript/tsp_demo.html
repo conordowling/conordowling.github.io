@@ -1,0 +1,221 @@
+<html>
+
+<head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Traveling Salesman Algorithms</h3>
+
+<div>
+<button onclick="minimumSpanningTree(points)">MST</button>
+<svg id="plot" width="600" height="600" canvas='true'>
+  <polyline id="tour" fill="none" stroke="blue" stroke-width="2"
+    points="" />
+</svg>
+</div>
+
+</body>
+
+<script>
+
+	function Node(x,y) {
+		this.x = x
+		this.y = y
+		this.id = () => this.x + "," + this.y;
+		return this;
+	}
+
+	function Edge(node1, node2, distance) {
+		this.i = node1;
+		this.j = node2;
+		this.length = distance;
+		return this;
+	}
+
+	var  MIN_DISTANCE = 5
+	var points = []
+	function mouseClickFunction(event) {
+		console.log("mouse click")
+		if(event.target.hasAttribute('canvas')) {
+			console.log("mouse on canvas")
+			var xcoord = event.offsetX
+			var ycoord = event.offsetY
+			var node = new Node(xcoord, ycoord)
+			if( nearestNeighbor(node) > MIN_DISTANCE ) {
+				points.push(node)
+				d3.select("svg")
+				  .append("circle")
+				  .attr("cx", node.x)
+				  .attr("cy", node.y)
+				  .attr("r",3)
+				  .style("fille", "blue")
+			}
+		}
+		return
+	}
+
+	function nearestNeighbor(newPoint) {
+		if( points.length == 0) {
+			return 9999;
+		}
+		return points.map(p => distance(p, newPoint) ).reduce((a,b) => Math.min(a,b) )
+	}
+
+	function distance(p1,p2) {
+		return Math.sqrt( 
+			Math.pow((p2.x - p1.x),2) + 
+			Math.pow((p2.y - p1.y), 2) 
+		)
+	}
+
+
+	/*
+	function minimumSpanningTree(points) {
+		var tree = [ points[0] ]
+		var rest = points.slice(1,points.length)
+
+		var edges = []
+		for( var i in points ) {
+			for( var j=i+1; j<points.length; j++) {
+				edges.push( Edge(points[i], points[j], distance(points[i], points[j])));
+			}
+		}
+		edges = edges.sort( (a,b) => a.length < b.length);
+		edges.forEach( function(edge) {
+			return;
+		});
+
+	}*/
+
+	function plotTree(edges, color) {
+		var svg = d3.select("svg")
+		edges.forEach((edge) => {
+			svg.append("line")
+			   .attr("x1", edge.i.x)
+			   .attr("y1", edge.i.y)
+			   .attr("x2", edge.j.x)
+			   .attr("y2", edge.j.y)
+			   .attr("stroke", color)
+		})
+	}
+
+	function minimumSpanningTree(points) {
+		var edges = calculateMST(points);
+		plotTree(edges, "blue");
+	}
+
+	function calculateMST(points) { 
+		if(points.length < 2) {
+			return []
+		}
+		var tree = [ points[0] ]
+		var rest = points.slice(1)
+
+		var edges = []
+		while( rest.length > 0 ) {
+			var minEdge = new Edge(tree[0], rest[0], distance(tree[0], rest[0]));			
+			var restIndex = null;
+			for( i in tree) {
+				for( j in rest ) {
+					var d = distance( tree[i], rest[j] )
+					if( d < minEdge.length ) {
+						minEdge = new Edge(tree[i], rest[j], d)
+						restIndex = j
+					}
+				}
+			}
+			edges.push(minEdge);
+			rest.splice(restIndex, 1)
+			tree.push(minEdge.j);
+		}
+		return edges;
+	}
+
+	
+
+	
+
+	function getCost(edges) {
+		return edges.map( (e) => e.length).reduce((a,b) => a+b)
+	}
+
+
+	function twoApproximation()
+
+	function constructPreorderPath(nodes, edges) {
+		var path = []
+		path.push(nodes[0])
+
+
+		path.push(nodes[0])
+	}
+
+	// 1.5 approximation for metric TSP
+	function christofidesAlgorithm(points) {
+		// calculate minimum spanning tree T
+		var T = calculateMST(points);
+		// calculate the set of vertices O with odd degree in T
+		var O = getOddVertices(points, T)
+		// form subgraph of G using only the vertices of O
+		var G = inducedSubgraph(O, points)
+		// construct a minimum-weight perfect matching M in this subgraph
+		var M = perfectMatching(G)
+		// unite matching and spanning tree T U M to form an eulerian multigraph
+		var E = multigraph(T, M)
+		// calculate euler tour
+		var eulerTour = eulerTour(E)
+		// remove repeated vertices, giving the algorithm's output.
+		var tour = removeRepeatedVertices(eulerTour)
+		return tour
+	}
+
+	function getOddVertices(points, edges) {
+		return points.filter( (p) => 
+			(edges.filter( (e) => 
+				e.i == p || e.j == p
+			).length % 2) == 1 
+		)
+	}
+
+	function inducedSubgraph(subgraph, nodes) {
+		return
+	}
+
+	function perfectMatching(M) {
+		return
+	}
+
+	function multigraph(tree, matching) {
+		return tree.concat( matching )
+	}
+
+	function eulerTour(nodes, edges) {
+		return
+	}
+
+	function removeRepeatedVertices(edges) {
+		var visited = {}
+		var tour = []
+
+		visited[edges[0].i.id()] = true
+		var current = edges[0].i
+		edges.forEach((e) => {
+			if( visited[ e.j.id()] != true) {
+				tour.push(new Edge(current, e.j, distance(current,e.j)))
+			}
+		})
+		return tour
+	}
+
+	
+
+	document.addEventListener('click', mouseClickFunction, false)
+
+
+</script>
+
+</html>
