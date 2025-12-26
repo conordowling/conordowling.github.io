@@ -1,0 +1,56 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+
+const metadata = {
+  title: 'Resume — Conor Dowling',
+  description: 'View and download the resume of Conor Dowling, Lead Software Engineer specializing in data engineering and analytics.',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- HeroText Widget ******************* -->
+
+  <HeroText
+    tagline="Resume"
+    title="Conor Dowling"
+    subtitle="Lead Software Engineer specializing in data engineering, analytics, and building scalable systems."
+  />
+
+  <!-- Download Button ******************* -->
+
+  <div class="max-w-5xl mx-auto px-4 pb-8">
+    <div class="flex justify-center">
+      <a
+        href="/Conor_Dowling_Resume.pdf"
+        download
+        class="btn-primary inline-flex items-center gap-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Download Resume (PDF)
+      </a>
+    </div>
+  </div>
+
+  <!-- PDF Embed ********************* -->
+
+  <div class="max-w-5xl mx-auto px-4 pb-12">
+    <div class="relative w-full" style="height: 85vh;">
+      <iframe
+        src="/Conor_Dowling_Resume.pdf"
+        class="w-full h-full border-2 border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
+        title="Conor Dowling Resume"
+      >
+        <p class="text-center text-muted">
+          Your browser does not support PDFs.
+          <a href="/Conor_Dowling_Resume.pdf" download class="text-primary hover:underline">
+            Download the PDF
+          </a>
+          to view it.
+        </p>
+      </iframe>
+    </div>
+  </div>
+</Layout>
