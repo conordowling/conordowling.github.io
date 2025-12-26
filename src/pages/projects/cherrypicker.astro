@@ -36,47 +36,59 @@ const metadata = {
     <Fragment slot="content">
       <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Overview</h2>
       <p class="text-muted text-lg mt-4">
-        Cherrypicker is a tool designed to find statistically significant cutoffs in basketball statistics,
-        generating eye-catching lines similar to those used on mainstream sports broadcasts.
-      </p>
-      <p class="text-muted text-lg mt-4">
-        Sports broadcasts often highlight impressive statistical achievements with specific cutoffs
-        (e.g., "First player since 2015 to score 30+ points in 5 consecutive games"). Cherrypicker
-        automates the discovery of these statistically meaningful thresholds, making it easier to
-        identify and communicate remarkable performances.
+        Cherrypicker uses logistic regression to find statistically significant performance thresholds in basketball statistics.
+        Sports broadcasts often highlight impressive achievements with specific cutoffs (e.g., "Team X is 40-3 when scoring 117+ points").
+        This tool automates the discovery of these meaningful patterns, identifying which statistical benchmarks most strongly correlate with winning.
       </p>
     </Fragment>
   </Content>
 
-  <!-- Technologies Section *********** -->
+  <!-- 2024-25 Season Stats *********** -->
 
-  <Content isReversed>
+  <Content>
     <Fragment slot="content">
-      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Key Features</h2>
-      <ul class="text-muted text-lg mt-4 space-y-3">
-        <li class="flex items-start">
-          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <span>Statistical analysis to identify significant performance thresholds</span>
-        </li>
-        <li class="flex items-start">
-          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <span>Automated generation of broadcast-style statistical highlights</span>
-        </li>
-        <li class="flex items-start">
-          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <span>Focus on finding meaningful patterns in basketball performance data</span>
-        </li>
-      </ul>
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-6">2024-25 Season Stats</h2>
+
+      <!-- Team Selector -->
+      <div class="mb-8">
+        <label for="team-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Select Team
+        </label>
+        <select
+          id="team-select"
+          class="block w-full max-w-md px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+        >
+          <option value="">-- Select a team --</option>
+        </select>
+      </div>
+
+      <!-- Stats Display -->
+      <div id="stats-container" class="hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <thead class="bg-gray-50 dark:bg-slate-700">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Stat</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Cutoff</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Over</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Under</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Significance</th>
+              </tr>
+            </thead>
+            <tbody id="stats-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+              <!-- Stats will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Loading/Error Messages -->
+      <div id="loading-message" class="hidden text-gray-600 dark:text-gray-400">Loading stats...</div>
+      <div id="error-message" class="hidden text-red-600 dark:text-red-400"></div>
     </Fragment>
 
     <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+      <div class="absolute inset-0 bg-gray-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
 
@@ -94,3 +106,141 @@ const metadata = {
     </a>
   </div>
 </Layout>
+
+<script>
+  let cherrypickerData = [];
+
+  // Load data on page load
+  async function loadData() {
+    try {
+      const response = await fetch('/cherrypicker-data.json');
+      if (!response.ok) throw new Error('Failed to load data');
+      cherrypickerData = await response.json();
+      populateTeamDropdown();
+    } catch (error) {
+      console.error('Error loading data:', error);
+      showError('Failed to load cherrypicker data. Please try again later.');
+    }
+  }
+
+  // Populate team dropdown
+  function populateTeamDropdown() {
+    const select = document.getElementById('team-select');
+    if (!select) return;
+
+    cherrypickerData.forEach((team) => {
+      const option = document.createElement('option');
+      option.value = team.team_id;
+      option.textContent = team.full_name;
+      select.appendChild(option);
+    });
+
+    select.addEventListener('change', (e) => {
+      const teamId = e.target.value;
+      if (teamId) {
+        displayTeamStats(teamId);
+      } else {
+        hideStats();
+      }
+    });
+  }
+
+  // Display stats for selected team
+  function displayTeamStats(teamId) {
+    const team = cherrypickerData.find((t) => t.team_id === teamId);
+    if (!team) return;
+
+    const statsTableEl = document.getElementById('stats-table');
+    const statsContainerEl = document.getElementById('stats-container');
+
+    if (!statsTableEl || !statsContainerEl) return;
+
+    // Clear existing stats
+    statsTableEl.innerHTML = '';
+
+    // Add stats rows
+    team.stats.forEach((stat) => {
+      const row = document.createElement('tr');
+      row.className = 'hover:bg-gray-50 dark:hover:bg-slate-700';
+
+      // Format measure name
+      const measureName = formatMeasureName(stat.measure);
+
+      // Format cutoff based on measure type
+      const cutoffValue = formatCutoff(stat.measure, stat.cutoff);
+
+      row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">${measureName}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">${cutoffValue}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-green-400 font-medium">
+          ${stat.record_over} (${stat.win_pct_over}%)
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 dark:text-red-400 font-medium">
+          ${stat.record_under} (${stat.win_pct_under}%)
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+          ${(stat.prsquared * 100).toFixed(1)}%
+        </td>
+      `;
+
+      statsTableEl.appendChild(row);
+    });
+
+    // Show stats container
+    statsContainerEl.classList.remove('hidden');
+  }
+
+  // Hide stats
+  function hideStats() {
+    const statsContainerEl = document.getElementById('stats-container');
+    if (statsContainerEl) {
+      statsContainerEl.classList.add('hidden');
+    }
+  }
+
+  // Format measure name
+  function formatMeasureName(measure) {
+    const nameMap = {
+      PTS: 'Points',
+      FGM: 'Field Goals Made',
+      FGA: 'Field Goals Attempted',
+      FG_PCT: 'Field Goal %',
+      FG3M: '3-Pointers Made',
+      FG3A: '3-Pointers Attempted',
+      FG3_PCT: '3-Point %',
+      FTM: 'Free Throws Made',
+      FT_PCT: 'Free Throw %',
+      OREB: 'Offensive Rebounds',
+      DREB: 'Defensive Rebounds',
+      REB: 'Total Rebounds',
+      AST: 'Assists',
+      STL: 'Steals',
+      BLK: 'Blocks',
+      TOV: 'Turnovers',
+      PF: 'Personal Fouls',
+    };
+    return nameMap[measure] || measure;
+  }
+
+  // Format cutoff value
+  function formatCutoff(measure, cutoff) {
+    // Percentage stats
+    if (measure.includes('PCT')) {
+      return `${(cutoff * 100).toFixed(1)}%`;
+    }
+    // Whole number stats
+    return cutoff.toFixed(0);
+  }
+
+  // Show error message
+  function showError(message) {
+    const errorEl = document.getElementById('error-message');
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+  }
+
+  // Initialize on page load
+  loadData();
+</script>
