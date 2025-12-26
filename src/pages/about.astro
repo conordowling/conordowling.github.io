@@ -1,228 +1,140 @@
 ---
-import Features2 from '~/components/widgets/Features2.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import Hero from '~/components/widgets/Hero.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Steps2 from '~/components/widgets/Steps2.astro';
+import Features from '~/components/widgets/Features.astro';
+import Content from '~/components/widgets/Content.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
 import Layout from '~/layouts/PageLayout.astro';
 
 const metadata = {
-  title: 'About us',
+  title: 'About — Conor Dowling',
+  description: 'Learn more about Conor Dowling, Lead Software Engineer specializing in data engineering and analytics.',
 };
 ---
 
 <Layout metadata={metadata}>
   <!-- Hero Widget ******************* -->
 
-  <Hero
-    tagline="About us"
-    image={{
-      src: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Caos Image',
-    }}
+  <HeroText
+    tagline="About"
+    title="Hi, I'm Conor"
+    subtitle="Lead Software Engineer with over a decade of experience building scalable data systems and leading high-velocity engineering teams."
+  />
+
+  <!-- Professional Background ******* -->
+
+  <Content>
+    <Fragment slot="content">
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Professional Background</h2>
+      <p class="text-muted text-lg mt-4">
+        Throughout my career, I've had the opportunity to work across diverse sectors including defense contracting and SaaS companies.
+        My expertise spans ads, marketing analytics, and large-scale data engineering, where I've built systems processing petabyte-scale datasets.
+      </p>
+      <p class="text-muted text-lg mt-4">
+        I thrive in environments that demand both technical excellence and deep domain understanding, consistently delivering solutions
+        that drive business impact while maintaining the highest standards of code quality.
+      </p>
+    </Fragment>
+  </Content>
+
+  <!-- Technical Expertise ************ -->
+
+  <Features
+    id="expertise"
+    title="Technical Expertise"
+    subtitle="Core technologies and approaches I leverage to build robust data systems"
+    items={[
+      {
+        title: 'Functional Programming',
+        description:
+          'Scala and Python expertise, leveraging immutability and pure functions for predictable, testable code.',
+        icon: 'tabler:code',
+      },
+      {
+        title: 'Data Engineering',
+        description:
+          'Building scalable pipelines with Apache Spark, Iceberg, and ClickHouse for petabyte-scale analytics.',
+        icon: 'tabler:database',
+      },
+      {
+        title: 'Cloud Infrastructure',
+        description:
+          'Designing and implementing cloud-native solutions on AWS for high-availability data platforms.',
+        icon: 'tabler:cloud',
+      },
+      {
+        title: 'Domain Expertise',
+        description:
+          'Deep dive into business domains to build systems with the right abstractions and models.',
+        icon: 'tabler:bulb',
+      },
+      {
+        title: 'Team Leadership',
+        description:
+          'Mentoring engineers and leading high-velocity teams to deliver complex projects successfully.',
+        icon: 'tabler:users',
+      },
+      {
+        title: 'System Design',
+        description:
+          'Architecting maintainable, testable, and extensible systems that stand the test of time.',
+        icon: 'tabler:tools',
+      },
+    ]}
+  />
+
+  <!-- Work Philosophy **************** -->
+
+  <Content
+    isReversed
+    items={[
+      {
+        title: 'Maintainability First',
+        description:
+          'Code is read far more than it is written. I prioritize clarity and maintainability to ensure systems remain understandable and evolvable.',
+      },
+      {
+        title: 'Test-Driven Approach',
+        description:
+          'Comprehensive testing provides confidence to refactor and evolve systems without fear of breaking existing functionality.',
+      },
+      {
+        title: 'Right Abstractions',
+        description:
+          'Finding the right abstractions for the domain is crucial. I invest time in understanding business problems to build elegant solutions.',
+      },
+      {
+        title: 'Team Collaboration',
+        description:
+          'Great software is built by great teams. I focus on mentoring, knowledge sharing, and fostering a collaborative environment.',
+      },
+    ]}
   >
-    <Fragment slot="title">
-      Elevate your online presence with our <br />
-      <span class="text-accent dark:text-white"> Beautiful Website Templates</span>
+    <Fragment slot="content">
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Work Philosophy</h2>
+      <p class="text-muted text-lg">
+        I believe in building systems that are not just functional today, but maintainable and extensible for years to come.
+        My approach combines technical rigor with a deep commitment to understanding the domain and working collaboratively with teams.
+      </p>
     </Fragment>
 
-    <Fragment slot="subtitle">
-      Donec efficitur, ipsum quis congue luctus, mauris magna convallis mauris, eu auctor nisi lectus non augue. Donec
-      quis lorem non massa vulputate efficitur ac at turpis. Sed tincidunt ex a nunc convallis, et lobortis nisi tempus.
-      Suspendisse vitae nisi eget tortor luctus maximus sed non lectus.
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Hero>
+  </Content>
 
-  <!-- Stats Widget ****************** -->
+  <!-- Personal Interests ************* -->
 
-  <Stats
-    title="Statistics about us"
-    stats={[
-      { title: 'Offices', amount: '4' },
-      { title: 'Employees', amount: '248' },
-      { title: 'Templates', amount: '12' },
-      { title: 'Awards', amount: '24' },
-    ]}
-  />
-
-  <!-- Features3 Widget ************** -->
-
-  <Features3
-    title="Our templates"
-    subtitle="Etiam scelerisque, enim eget vestibulum luctus, nibh mauris blandit nulla, nec vestibulum risus justo ut enim. Praesent lacinia diam et ante imperdiet euismod."
-    columns={3}
-    isBeforeContent={true}
-    items={[
-      {
-        title: 'Educational',
-        description:
-          'Morbi faucibus luctus quam, sit amet aliquet felis tempor id. Cras augue massa, ornare quis dignissim a, molestie vel nulla.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Interior Design',
-        description:
-          'Vivamus porttitor, tortor convallis aliquam pretium, turpis enim consectetur elit, vitae egestas purus erat ac nunc nulla.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Photography',
-        description:
-          'Duis sed lectus in nisl vehicula porttitor eget quis odio. Aliquam erat volutpat. Nulla eleifend nulla id sem fermentum.',
-        icon: 'tabler:template',
-      },
-    ]}
-  />
-
-  <!-- Features3 Widget ************** -->
-
-  <Features3
-    columns={3}
-    isAfterContent={true}
-    items={[
-      {
-        title: 'E-commerce',
-        description:
-          'Rutrum non odio at vehicula. Proin ipsum justo, dignissim in vehicula sit amet, dignissim id quam. Sed ac tincidunt sapien.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Blog',
-        description:
-          'Nullam efficitur volutpat sem sed fringilla. Suspendisse et enim eu orci volutpat laoreet ac vitae libero.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Business',
-        description:
-          'Morbi et elit finibus, facilisis justo ut, pharetra ipsum. Donec efficitur, ipsum quis congue luctus, mauris magna.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Branding',
-        description:
-          'Suspendisse vitae nisi eget tortor luctus maximus sed non lectus. Cras malesuada pretium placerat. Nullam venenatis dolor a ante rhoncus.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Medical',
-        description:
-          'Vestibulum malesuada lacus id nibh posuere feugiat. Nam volutpat nulla a felis ultrices, id suscipit mauris congue. In hac habitasse platea dictumst.',
-        icon: 'tabler:template',
-      },
-      {
-        title: 'Fashion Design',
-        description:
-          'Maecenas eu tellus eget est scelerisque lacinia et a diam. Aliquam velit lorem, vehicula id fermentum et, rhoncus et purus.',
-        icon: 'tabler:template',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-      alt: 'Colorful Image',
-    }}
-  />
-
-  <!-- Steps2 Widget ****************** -->
-
-  <Steps2
-    title="Our values"
-    subtitle="Maecenas eu tellus eget est scelerisque lacinia et a diam. Aliquam velit lorem, vehicula id fermentum et, rhoncus et purus. Nulla facilisi. Vestibulum malesuada lacus."
-    items={[
-      {
-        title: 'Customer-centric approach',
-        description:
-          'Donec id nibh neque. Quisque et fermentum tortor. Fusce vitae dolor a mauris dignissim commodo. Ut eleifend luctus condimentum.',
-      },
-      {
-        title: 'Constant Improvement',
-        description:
-          'Phasellus laoreet fermentum venenatis. Vivamus dapibus pulvinar arcu eget mattis. Fusce eget mauris leo.',
-      },
-      {
-        title: 'Ethical Practices',
-        description:
-          'Vestibulum imperdiet libero et lectus molestie, et maximus augue porta. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-      },
-    ]}
-  />
-
-  <!-- Steps2 Widget ****************** -->
-
-  <Steps2
-    title="Achievements"
-    subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mi risus tempus nulla, sed porttitor est nibh at nulla."
-    isReversed={true}
-    callToAction={{
-      text: 'See more',
-      href: '/',
-    }}
-    items={[
-      {
-        title: 'Global reach',
-        description: 'Nam malesuada urna in enim imperdiet tincidunt. Phasellus non tincidunt nisi, at elementum mi.',
-        icon: 'tabler:globe',
-      },
-      {
-        title: 'Positive customer feedback and reviews',
-        description:
-          'Cras semper nulla leo, eget laoreet erat cursus sed. Praesent faucibus massa in purus iaculis dictum.',
-        icon: 'tabler:message-star',
-      },
-      {
-        title: 'Awards and recognition as industry experts',
-        description:
-          'Phasellus lacinia cursus velit, eu malesuada magna pretium eu. Etiam aliquet tellus purus, blandit lobortis ex rhoncus vitae.',
-        icon: 'tabler:award',
-      },
-    ]}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Our locations"
-    tagline="Find us"
-    columns={4}
-    items={[
-      {
-        title: 'EE.UU',
-        description: '1234 Lorem Ipsum St, 12345, Miami',
-      },
-      {
-        title: 'Spain',
-        description: '5678 Lorem Ipsum St, 56789, Madrid',
-      },
-      {
-        title: 'Australia',
-        description: '9012 Lorem Ipsum St, 90123, Sydney',
-      },
-      {
-        title: 'Brazil',
-        description: '3456 Lorem Ipsum St, 34567, São Paulo',
-      },
-    ]}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Technical Support"
-    tagline="Contact us"
-    columns={2}
-    items={[
-      {
-        title: 'Chat with us',
-        description:
-          'Integer luctus laoreet libero, auctor varius purus rutrum sit amet. Ut nec molestie nisi, quis eleifend mi.',
-        icon: 'tabler:messages',
-      },
-      {
-        title: 'Call us',
-        description:
-          'Mauris faucibus finibus orci, in posuere elit viverra non. In hac habitasse platea dictumst. Cras lobortis metus a hendrerit congue.',
-        icon: 'tabler:headset',
-      },
-    ]}
-  />
+  <Content>
+    <Fragment slot="content">
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Beyond Code</h2>
+      <p class="text-muted text-lg mt-4">
+        When I'm not building data systems, you'll find me on the ultimate frisbee field, strategizing over board games,
+        or spending time with my two dogs—a collie and a samoyed. I'm also a dedicated Boston sports fan,
+        experiencing all the highs and lows that come with it.
+      </p>
+      <p class="text-muted text-lg mt-4">
+        These interests keep me balanced and remind me that the best solutions often come when you step away from the keyboard
+        and approach problems with a fresh perspective.
+      </p>
+    </Fragment>
+  </Content>
 </Layout>
