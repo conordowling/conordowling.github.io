@@ -1,0 +1,67 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+
+const metadata = {
+  title: 'Projects — Conor Dowling',
+  description: 'Explore projects and side work by Conor Dowling, Lead Software Engineer.',
+};
+
+const projects = [
+  {
+    title: 'Cherrypicker',
+    description: 'Finds statistically significant cutoffs in basketball statistics to generate eye-catching lines similar to those used on mainstream sports broadcasts.',
+    image: '/nba-logo.svg',
+    link: '/projects/cherrypicker',
+  },
+];
+---
+
+<Layout metadata={metadata}>
+  <!-- HeroText Widget ******************* -->
+
+  <HeroText
+    tagline="Projects"
+    title="Featured Work"
+    subtitle="A collection of projects showcasing data engineering, analytics, and software development."
+  />
+
+  <!-- Projects List ********************* -->
+
+  <div class="max-w-4xl mx-auto px-4 pb-12">
+    <div class="space-y-8">
+      {projects.map((project) => (
+        <a
+          href={project.link}
+          class="block group"
+        >
+          <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+            <div class="md:flex">
+              <div class="md:flex-shrink-0 md:w-64 bg-gray-100 dark:bg-slate-700 flex items-center justify-center p-8">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  class="h-32 w-auto object-contain"
+                />
+              </div>
+              <div class="p-8 flex-1">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-primary transition-colors">
+                  {project.title}
+                </h2>
+                <p class="text-muted text-lg leading-relaxed">
+                  {project.description}
+                </p>
+                <div class="mt-4 inline-flex items-center text-primary font-medium group-hover:gap-2 transition-all">
+                  View Project
+                  <svg class="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

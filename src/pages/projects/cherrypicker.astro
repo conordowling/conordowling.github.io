@@ -1,0 +1,96 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Content from '~/components/widgets/Content.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+
+const metadata = {
+  title: 'Cherrypicker — Projects — Conor Dowling',
+  description: 'Finds statistically significant cutoffs in basketball statistics to generate eye-catching lines similar to those used on mainstream sports broadcasts.',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Section ******************* -->
+
+  <HeroText
+    tagline="Project"
+    title="Cherrypicker"
+    subtitle="Finding statistically significant cutoffs in basketball statistics"
+  />
+
+  <!-- Project Image ****************** -->
+
+  <div class="max-w-4xl mx-auto px-4 pb-8">
+    <div class="bg-gray-100 dark:bg-slate-800 rounded-lg p-12 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+      <img
+        src="/nba-logo.svg"
+        alt="NBA Logo"
+        class="h-48 w-auto"
+      />
+    </div>
+  </div>
+
+  <!-- Overview Section *************** -->
+
+  <Content>
+    <Fragment slot="content">
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Overview</h2>
+      <p class="text-muted text-lg mt-4">
+        Cherrypicker is a tool designed to find statistically significant cutoffs in basketball statistics,
+        generating eye-catching lines similar to those used on mainstream sports broadcasts.
+      </p>
+      <p class="text-muted text-lg mt-4">
+        Sports broadcasts often highlight impressive statistical achievements with specific cutoffs
+        (e.g., "First player since 2015 to score 30+ points in 5 consecutive games"). Cherrypicker
+        automates the discovery of these statistically meaningful thresholds, making it easier to
+        identify and communicate remarkable performances.
+      </p>
+    </Fragment>
+  </Content>
+
+  <!-- Technologies Section *********** -->
+
+  <Content isReversed>
+    <Fragment slot="content">
+      <h2 class="text-3xl font-bold tracking-tight dark:text-white sm:text-4xl mb-2">Key Features</h2>
+      <ul class="text-muted text-lg mt-4 space-y-3">
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Statistical analysis to identify significant performance thresholds</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Automated generation of broadcast-style statistical highlights</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-green-600 dark:text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Focus on finding meaningful patterns in basketball performance data</span>
+        </li>
+      </ul>
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- Back to Projects *************** -->
+
+  <div class="max-w-4xl mx-auto px-4 pb-12">
+    <a
+      href="/projects"
+      class="inline-flex items-center text-primary hover:underline font-medium"
+    >
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Projects
+    </a>
+  </div>
+</Layout>
